@@ -2,6 +2,7 @@ import React from 'react';
 import {
     StyleSheet,
     View,
+    Text,
 } from 'react-native';
 
 import MapView from 'react-native-maps';
@@ -15,23 +16,90 @@ export default class Mapa extends React.Component {
         title: 'Mapa',
     };
 
-    /*onRegionChange(region) {
-        this.setState({ region });
-    }*/
+    constructor(props) {
+        super(props);
+        this.state = {
+            mapRegion: {
+                latitude: 43.84864,
+                longitude: 18.35644,
+                latitudeDelta: 0.8,
+                longitudeDelta: 0.8,
+            },
+            locationResult: null,
+            location: {
+                coords: {
+                    latitude: 45.84625,
+                    longitude: 17.43307
+                }
+            },
+            markers: [],
+        };
+        this.getAllOrdersFromDatabase = this.getAllOrdersFromDatabase.bind(this);
+    }
+//getDelivery
+    getAllOrdersFromDatabase = async () => {
+        return fetch('http://192.168.1.45:3000/getAll')
+            .then(response => response.json())
+            .then(responseJSON => {
+                var markersData = responseJSON;
+                let markers = markersData.list.map((e, i)=>
+                    {
+                        return( {
+                            index: i + 1,
+                            name: e.name,
+                            surname: e.surname,
+                            address: e.address,
+                            orderMass: e.orderMass,
+                            orderVolume: e.orderVolume,
+                            coordinates:{
+                                longitude: e.longitude,
+                                latitude: e.latitude
+                            },
+                            route: e.route
+                        })
+                    }
+                )
+                this.setState({ markers: markers });
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+
+    };
+
+    componentDidMount() {
+        this.getAllOrdersFromDatabase();
+    }
+
+    _handleMapRegionChange = mapRegion => {
+        this.setState({ mapRegion });
+    };
 
     render() {
         return (
             <MapView
                 style={{flex: 1}}
-                region={{
-                    latitude: 43.84864,
-                    longitude: 18.35644,
-                    latitudeDelta: 0.8,
-                    longitudeDelta: 0.8,
-                }}
-                //region={this.state.region}
-                //onRegionChange={this.onRegionChange}
-            />
+                region={this.state.mapRegion}
+                onLongPress={this._handleLongPress}
+                onRegionChange={this.state._handleMapRegionChange}
+            >
+                {this.state.markers.map(marker => (
+                    <MapView.Marker
+                        coordinate={marker.coordinates}
+                    >
+                        <MapView.Callout>
+                            <View>
+                                <Text>Ime: {marker.name}</Text>
+                                <Text>Prezime: {marker.surname}</Text>
+                                <Text>Masa: {marker.orderMass}</Text>
+                                <Text>Volumen: {marker.orderVolume}</Text>
+                                <Text>Ruta: {marker.route}</Text>
+                            </View>
+                        </MapView.Callout>
+                    </MapView.Marker>
+                ))}
+            </MapView>
         );
     }
 }

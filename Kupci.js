@@ -33,7 +33,9 @@ export default class Kupci extends React.Component {
         }
         this.getAllOrdersFromDatabase = this.getAllOrdersFromDatabase.bind(this);
         this.deleteOrdersFromDatabase = this.deleteOrdersFromDatabase.bind(this);
-    }
+        this.forceUpdateHandler = this.forceUpdateHandler.bind(this);
+    };
+
 
     getAllOrdersFromDatabase(){
         fetch('http://192.168.1.45:3000/getAll', {
@@ -46,8 +48,9 @@ export default class Kupci extends React.Component {
             .then(res => res.json())
             .then(responseJSON => {
                 var allOrders = responseJSON;
-                let orders = allOrders.map((e)=> {
+                let orders = allOrders.list.map((e)=> {
                         return({
+                            key: e.id,
                             id: e.id,
                             name: e.name,
                             surname: e.surname,
@@ -75,24 +78,36 @@ export default class Kupci extends React.Component {
                 'Content-Type': 'application/json',
             }
         }).then((res)=>{
-            this.getAllOrdersFromDatabase()
-        })
-            .catch((e)=>{alert('Couldnt delete an order, ' + error)}  )
+            this.componentDidMount()
+            this.forceUpdateHandler()
+        }).catch((e)=>{alert('Couldnt delete an order, ' + error)} )
     }
+
+    forceUpdateHandler(){
+        this.forceUpdate();
+    };
 
     componentDidMount(){
         this.getAllOrdersFromDatabase()
     }
 
     renderItem = data =>
-        <TouchableOpacity
-            onPress={()=>this.deleteOrdersFromDatabase(data.item.id)}
-        >
+        <TouchableOpacity>
             <Text>
-                <Text>
-                    {data.item.name}
-                </Text>
+                {data.item.name}
+                {data.item.surname}
+                {data.item.orderMass}
+                {data.item.orderVolume}
+                {data.item.address}
             </Text>
+            <View style={[{ width: "25%", margin: 2, backgroundColor: "red", fontSize: 15 }]}>
+                <Button
+                    title="Obrisi"
+                    color='#038cfc'
+                    onPress={()=>this.deleteOrdersFromDatabase(data.item.id)}
+                >
+                </Button>
+            </View>
         </TouchableOpacity>
 
     render() {
