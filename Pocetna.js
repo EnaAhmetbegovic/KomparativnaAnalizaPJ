@@ -12,7 +12,7 @@ function Separator() {
     return <View style={styles.separator} />;
 }
 
-class Pocetna extends React.Component{
+export default class Pocetna extends React.Component{
     static navigationOptions = {
         title: 'Pocetna',
     };
@@ -34,8 +34,7 @@ class Pocetna extends React.Component{
                     <Button
                         title="Unos kupca"
                         color='#038cfc'
-                        //onPress={() => Alert.alert('Unos kupca')}
-                        //onPress={() => this.props.navigation.navigate('Kupac')}
+                        onPress={() => this.props.navigation.navigate('Kupac')}
 
                     />
                 </View>
@@ -46,7 +45,7 @@ class Pocetna extends React.Component{
                     <Button
                         title="Mapa"
                         color='#60b6fc'
-                        onPress={() => Alert.alert('Mapa')}
+                        onPress={() => this.props.navigation.navigate('Mapa')}
 
                     />
                 </View>
@@ -57,7 +56,7 @@ class Pocetna extends React.Component{
                     <Button
                         title="Lista kupaca"
                         color='#99d1ff'
-                        onPress={() => Alert.alert('Lista kupaca')}
+                        onPress={() => this.props.navigation.navigate('Kupci')}
 
                     />
                 </View>
@@ -71,7 +70,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#03fcca',
         alignItems: 'center',
-        justifyContent: 'center',
     },
 
     title: {

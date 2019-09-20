@@ -5,16 +5,16 @@ import {
     createStackNavigator
 } from 'react-navigation-stack';
 
-import Pocetna from 'Pocetna';
-import Kupac from 'Kupac';
-import Mapa from 'Mapa';
-import Kupci from 'Kupci';
+import Pocetna from './Pocetna';
+import Kupac from './Kupac';
+import Mapa from './Mapa';
+import Kupci from './Kupci';
 
 const MainNavigator = createStackNavigator({
-        Pocetna: {screen: Pocetna},
-        Kupac: {screen: Kupac},
-        Mapa: {screen: Mapa},
-        Kupci: {screen: Kupci},
+        Pocetna: Pocetna,
+        Kupac: Kupac,
+        Mapa: Mapa,
+        Kupci: Kupci,
     },
 
     {
