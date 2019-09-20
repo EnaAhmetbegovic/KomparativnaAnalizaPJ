@@ -22,8 +22,8 @@ export default class Mapa extends React.Component {
             mapRegion: {
                 latitude: 43.84864,
                 longitude: 18.35644,
-                latitudeDelta: 0.8,
-                longitudeDelta: 0.8,
+                latitudeDelta: 8,
+                longitudeDelta: 8,
             },
             locationResult: null,
             location: {
@@ -36,9 +36,16 @@ export default class Mapa extends React.Component {
         };
         this.getAllOrdersFromDatabase = this.getAllOrdersFromDatabase.bind(this);
     }
+
 //getDelivery
-    getAllOrdersFromDatabase = async () => {
-        return fetch('http://192.168.1.45:3000/getAll')
+    getAllOrdersFromDatabase () {
+        fetch('http://192.168.1.45:3000/getDelivery', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
             .then(response => response.json())
             .then(responseJSON => {
                 var markersData = responseJSON;
